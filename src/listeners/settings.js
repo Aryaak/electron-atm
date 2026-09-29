@@ -38,7 +38,8 @@ $(function(){
 
   // Image path
   function setImagePath(){
-    var selected_image_path = dialog.showOpenDialog({
+    // showOpenDialog returns a Promise since Electron 6; the sync variant keeps the array result
+    var selected_image_path = dialog.showOpenDialogSync({
         properties: ['openDirectory']
     });
 

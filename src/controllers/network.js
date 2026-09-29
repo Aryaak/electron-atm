@@ -59,7 +59,9 @@ class Network {
 
       this.client.on('data', (data) => {
         this.trace.trace(data, ' << ' + data.length + ' bytes received:');
-        this.ipc.send('network-data-received', data);
+        // IPC uses structured clone since Electron 9: a Buffer arrives as Uint8Array,
+        // so pass a byte-preserving string that the NDC parser can read
+        this.ipc.send('network-data-received', data.toString('binary'));
       });
     }else{
       this.client.end();

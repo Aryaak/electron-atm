@@ -864,7 +864,8 @@ class ATM {
   }
 
   readCard(cardnumber, track2_data){
-    this.track2 = cardnumber + '=' + track2_data;
+    // Real card readers deliver Track 2 with start (;) and end (?) sentinels
+    this.track2 = ';' + cardnumber + '=' + track2_data + '?';
     this.card = this.parseTrack2(this.track2);
     if(this.card){
       this.log.info('Card ' + this.card.number + ' read');
@@ -1037,9 +1038,9 @@ class ATM {
   processEnterButtonPressed(){
     switch(this.current_state.get('type')){
     case 'B':
+      this.display.insertText(this.PIN_buffer, '*');
       if(this.PIN_buffer.length >= 4)
         this.processState(this.current_state.get('number'));
-      this.display.insertText(this.PIN_buffer, '*');
       break;
     case 'F':
       // If the cardholder presses the Enter key, it has the same effect as pressing FDK ‘A’
@@ -1065,9 +1066,10 @@ class ATM {
     switch(this.current_state.get('type')){
     case 'B':
       this.PIN_buffer += button;
+      // Echo before leaving the state, so the next state's screen is not overwritten
+      this.display.insertText(this.PIN_buffer, '*');
       if(this.PIN_buffer.length >= this.FITs.getMaxPINLength(this.card.number) || this.PIN_buffer.length >= 6 )
         this.processState(this.current_state.get('number'));
-      this.display.insertText(this.PIN_buffer, '*');
       break;
     case 'F':
       this.amount_buffer = this.amount_buffer.substr(1) + button;

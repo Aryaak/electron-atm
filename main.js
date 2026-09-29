@@ -20,7 +20,14 @@ electron.app.once('ready', function () {
     // Don't show the window until it ready, this prevents any white flickering
     show: false,
     icon: path.join(__dirname, '/img/icon.png'),
-    title: 'Electron ATM'
+    title: 'Electron ATM',
+    // The renderer scripts use require() and electron.remote, which are
+    // disabled by default since Electron 5
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false
+    }
   })
 
   // Open the DevTools.

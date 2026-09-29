@@ -1264,7 +1264,7 @@ test('should read card', t => {
 
   atm.readCard(cardnumber, track2_data);
   t.true(atm.log.info.calledWith('Card ' + cardnumber + ' read'));
-  t.true(atm.log.info.calledWith('Track2: ' + cardnumber + '=' + track2_data));
+  t.true(atm.log.info.calledWith('Track2: ;' + cardnumber + '=' + track2_data + '?'));
   t.is(atm.status, 'Processing Card');
 });
 
